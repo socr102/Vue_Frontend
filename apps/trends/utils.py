@@ -1,0 +1,1 @@
+DIRECTIONS = ['up', 'down']

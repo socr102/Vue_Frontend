@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  postgres:
+    restart: always
+    container_name: 'django-db'
+    image: postgres:12
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+
+  frontend-nginx:
+    ports:
+      - '8080:80'
+
+    restart: always
+    container_name: 'frontend-nginx'
+    network_mode: host
+    environment:
+      # DJANGO API BASE URL
+      - VUE_APP_API_BASE=http://127.0.0.1:8000
+    build:
+      context: ./crescofy-frontend
+      dockerfile: ./config/nginx/Dockerfile
+    env_file:
+      - ./crescofy-frontend/.env
+    networks:
+      - django
+
+  web:
+    build: ./
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+    ports:
+    - 8000:8000
+    env_file:
+      - .env
+    networks:
+      - django
+    entrypoint: /usr/src/app/scripts/entrypoint.sh
+
+networks:
+  django:
+    name: django

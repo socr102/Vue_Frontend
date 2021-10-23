@@ -1,0 +1,56 @@
+FROM python:3.8.3-alpine as builder
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /usr/src/app
+
+RUN apk update --no-cache \
+    && apk add postgresql-dev gcc python3-dev musl-dev build-base libffi-dev openssl-dev
+
+COPY ./requirements.txt .
+
+RUN pip install --upgrade pip setuptools wheel
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+
+#########
+# FINAL IMAGE #
+#########
+FROM python:3.8.3-alpine
+
+# create directory for the app user
+RUN mkdir -p /home/app
+
+# create the app user
+RUN addgroup -S app && adduser -S app -G app
+
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apk update && apk add --no-cache \
+    libpq build-base libffi-dev openssl-dev \
+    rust=1.47.0-r2 cargo=1.47.0-r2 \
+    --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community --allow-untrusted
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --no-cache /wheels/*
+
+# copy entrypoint-prod.sh
+COPY ./scripts/entrypoint.sh $APP_HOME
+
+# copy project
+COPY . $APP_HOME
+
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
+
+# run entrypoint.prod.sh
+ENTRYPOINT ["/home/app/web/scripts/entrypoint.sh"]

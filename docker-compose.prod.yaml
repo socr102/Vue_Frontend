@@ -1,0 +1,81 @@
+version: "3.5"
+services:
+  web:
+    depends_on:
+      - db
+      - redis
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.production
+    command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
+    restart: always
+    container_name: 'web'
+    volumes:
+      - ./:/usr/src/app/
+    expose:
+      - 8000
+    env_file:
+      - .env.prod
+    networks:
+      - app_network
+    entrypoint: /usr/src/app/scripts/entrypoint.sh
+
+  celery:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.production
+    command: celery -A backend worker -B -l info
+    restart: always
+    container_name: 'celery'
+    volumes:
+      - ./:/usr/src/app/
+    env_file:
+      - .env.prod
+    networks:
+      - app_network
+    depends_on:
+      - redis
+
+  db:
+    restart: always
+    container_name: 'db'
+    image: postgres:12.0-alpine
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod
+    networks:
+      - app_network
+    command: postgres -c work_mem=64MB -c pg_trgm.similarity_threshold=0.15
+
+  frontend-nginx:
+    depends_on:
+      - web
+    ports:
+      - '80:80'
+    restart: always
+    container_name: 'frontend-nginx'
+    volumes:
+      - ./crescofy-frontend/config/nginx/templates:/etc/nginx/templates
+    env_file:
+      - .env.prod
+    build:
+      context: ./crescofy-frontend
+      dockerfile: ./config/nginx/Dockerfile
+    networks:
+      - app_network
+
+  redis:
+    image: "redis:alpine"
+    container_name: 'redis'
+    restart: always
+
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge

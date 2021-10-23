@@ -1,0 +1,34 @@
+# declare our upstream server, which is our Gunicorn application
+upstream api_service {
+    # docker will automatically resolve this to the correct address
+    server ${API_URL};
+}
+
+# now we declare our main server
+server {
+
+    listen ${NGINX_PORT};
+    server_name ${NGINX_HOST};
+    charset utf-8;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /api {
+        # everything is passed to Gunicorn
+        proxy_pass http://api_service;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+    location / {
+      try_files $uri $uri/ @rewrites;
+    }
+
+    location @rewrites {
+      rewrite ^(.+)$ /index.html last;
+    }
+
+
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" data-dark="./assets/images/favicon-dark.ico">
+
+    <!-- App css -->
+    <link href="./plugins/jsgrid/jsgrid.min.css" rel="stylesheet">
+    <link href="./plugins/jsgrid/jsgrid-theme.min.css" rel="stylesheet">
+
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="./assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/css/app.css" rel="stylesheet" type="text/css" />
+    <link href="./plugins/daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css"  />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script>
+      // Dynamic favicon loading depending on light/dark mode in browser
+      window.addEventListener( 'DOMContentLoaded', setFavicon );
+      // Set specific favicon if browser is in dark mode
+      function setFavicon() {
+        if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches )
+        {
+          const favicon = document.querySelector('[data-dark]');
+          // No icon found
+          if ( ! favicon ) return;
+          // Dark version available
+          if ( favicon.dataset.dark )
+          {
+            favicon.href = favicon.dataset.dark;
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- jQuery  -->
+    <script src="./assets/js/jquery.min.js"></script>
+    <script src="./assets/js/jquery-ui.min.js"></script>
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/metismenu.min.js"></script>
+    <script src="./assets/js/waves.js"></script>
+    <script src="./assets/js/feather.min.js"></script>
+    <script src="./assets/js/jquery.slimscroll.min.js"></script>
+    <script src="./plugins/jsgrid/jsgrid.min.js"></script>
+    <script src="./plugins/moment/moment.min.js"></script>
+    <script src="./plugins/daterangepicker/daterangepicker.min.js"></script>
+
+  <!-- App js -->
+  <script defer src="./assets/js/app.js"></script>
+    <!-- built files will be auto injected -->
+
+  </body>
+
+</html>
