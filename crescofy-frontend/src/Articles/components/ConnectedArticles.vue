@@ -77,6 +77,8 @@ export default {
       handler: function() {
         if (this.productIds.length == 0) return;
         this[CONNECTED_ARTICLES](this.productIds).then(data => {
+          console.log("test");
+          console.log(data);
           this.grid.jsGrid("option", "data", data);
         })
       },
@@ -92,8 +94,8 @@ export default {
 }
 </script>
 
-<style>
-.larg-badge {
+<style src='../../../public/assets/css/new_all.css'>
+/*.larg-badge {
     font-size: 1.2em !important;
     font-weight: bold;
     display: inline;
@@ -102,5 +104,5 @@ export default {
 .larg-badge:after {
     content:"\a";
     white-space: pre;
-}
+}*/
 </style>

@@ -1,33 +1,39 @@
 <template>
-<div>
-<div class="topbar">
-    <nav class="navbar-custom">
-        <img src="@/../public/assets/images/logo.png" class="head-logo" height="54">
-        <ul class="list-unstyled topbar-nav float-right mb-0">
-            <li class="dropdown" v-if="userProfile.email">
-                <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button"
-                    aria-haspopup="false" aria-expanded="false">
-                    <img src="@/../public/assets/images/users/user-1.jpg" alt="profile-user" class="rounded-circle" />
-                    <span class="ml-1 nav-user-name hidden-sm">{{userProfile.email}} <i class="mdi mdi-chevron-down"></i> </span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="/"><i class="dripicons-user text-muted mr-2"></i> Profile</a>
-                    <a class="dropdown-item" href="/#/dashboard"><i class="dripicons-home text-muted mr-2"></i> Dashboard</a>
-                    <a class="dropdown-item" href="/#/admin/users" v-if="hasAdminPageAccess(userProfile)">
-                        <i class="dripicons-monitor text-muted mr-2"></i> Admin
-                    </a>
-                    <a class="dropdown-item" href="/#/admin/orgs" v-if="userProfile.is_staff || userProfile.is_superuser">
-                        <i class="dripicons-suitcase text-muted mr-2"></i> Organizations
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item bg-light" @click="signOut" href="#"><i class="dripicons-exit text-muted mr-2"></i> Logout</a>
-                </div>
-            </li>
-        </ul>
-    </nav>
-</div>
+  <!-- <div id="header" v-if="userProfile.email"> -->
+  <div id="header" >
 
-</div>
+    <button class="toggle-btn" @click="toggleFun()"></button>
+    <div class="title-details">
+      <h2>{{title}}</h2>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#"></a></li>
+          <!-- <li class="breadcrumb-item"><a href="#">{{auth.dashboard}}</a></li> -->
+
+          <!-- <li class="breadcrumb-item active" aria-current="page">{{author.cart}}</li> -->
+          <li class="breadcrumb-item active" aria-current="page"></li>
+          <!-- <li class="breadcrumb-item active" aria-current="page">Library</li> -->
+        </ol>
+      </nav>
+    </div>
+    <div v-if="currentUrl == '/Cart'" id="product-tabs">
+      <div class="toolbar-holder p-2" >
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb p-2">
+              <li class="breadcrumb-item">Sort by</li>
+            </ol>
+          </nav>
+          <div class=" select-holder "   >
+              <select class="nav-dropdown">
+                <option>Most Common Combinations</option>
+                <option>Most Common Combinations</option>
+                <option>Most Common Combinations</option>
+                <option>Most Common Combinations</option>
+              </select>
+          </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

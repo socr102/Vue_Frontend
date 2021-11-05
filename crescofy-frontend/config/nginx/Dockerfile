@@ -1,9 +1,18 @@
 # build stage
 FROM node:lts-alpine as build-stage
+RUN apk add g++ make python2
 WORKDIR /app
 COPY package*.json ./
+
 RUN npm install
+
+RUN npm install sass-loader -D
+
+RUN npm install node-sass -D
+
 COPY . .
+
+
 RUN npm run build
 
 # production stage

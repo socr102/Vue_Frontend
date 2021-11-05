@@ -1,14 +1,12 @@
 function isDebugMode() {
-    return process.env.NODE_ENV !== 'production';
+  return process.env.NODE_ENV !== 'production';
 }
 
 function authHeader(token) {
-    return { "Authorization": `Bearer ${token}` };
+  return {"Authorization": `Bearer ${token}`};
 }
 
 const API_URL = process.env.VUE_APP_API_BASE || '';
-
-console.log(API_URL);
 
 const DATE_FORMAT = 'DD/MM/YYYY';
 
