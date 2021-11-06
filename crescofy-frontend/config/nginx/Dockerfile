@@ -1,5 +1,5 @@
 # build stage
-FROM catchdigital/node-sass as build-stage
+FROM node:14.15.1 as build-stage
 
 RUN apk add g++ make python2
 
@@ -11,7 +11,8 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN npm i --unsafe-perm node-sass
+#RUN npm i --unsafe-perm node-sass
+
 #RUN npm install  --unsafe-perm -g sass-loader
 
 #RUN npm install --unsafe-perm -g node-sass
