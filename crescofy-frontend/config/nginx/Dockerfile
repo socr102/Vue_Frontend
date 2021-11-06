@@ -1,5 +1,5 @@
 # build stage
-FROM node:alpine as build-stage
+FROM node:lts-alpine as build-stage
 
 RUN apk add g++ make python2
 
@@ -9,9 +9,11 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN npm install  --unsafe-perm -g sass-loader
+#RUN npm install  --unsafe-perm -g sass-loader
 
-RUN npm install --unsafe-perm -g node-sass
+#RUN npm install --unsafe-perm -g node-sass
+
+RUN npm install sass-loader sass webpack --save-dev
 
 COPY . .
 
