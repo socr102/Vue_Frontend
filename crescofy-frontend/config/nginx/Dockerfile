@@ -7,8 +7,11 @@ WORKDIR /app
 
 COPY package*.json ./
 
+# RUN npm install --save @popperjs/core
+
 RUN npm install
 
+RUN npm i --unsafe-perm node-sass
 #RUN npm install  --unsafe-perm -g sass-loader
 
 #RUN npm install --unsafe-perm -g node-sass
