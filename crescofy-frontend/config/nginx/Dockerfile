@@ -1,5 +1,5 @@
 # build stage
-FROM node:14.15.1 as build-stage
+FROM node:14.15.1-alpine as build-stage
 
 RUN apk add g++ make python2
 
